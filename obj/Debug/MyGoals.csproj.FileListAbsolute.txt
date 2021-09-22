@@ -1,0 +1,10 @@
+C:\Users\zeoco\OneDrive\Documents\GitHub\MyGoals\MyGoals\bin\Debug\MyGoals.exe.config
+C:\Users\zeoco\OneDrive\Documents\GitHub\MyGoals\MyGoals\bin\Debug\MyGoals.exe
+C:\Users\zeoco\OneDrive\Documents\GitHub\MyGoals\MyGoals\bin\Debug\MyGoals.pdb
+C:\Users\zeoco\OneDrive\Documents\GitHub\MyGoals\MyGoals\obj\Debug\MyGoals.csproj.AssemblyReference.cache
+C:\Users\zeoco\OneDrive\Documents\GitHub\MyGoals\MyGoals\obj\Debug\MyGoals.GoalsMainForm.resources
+C:\Users\zeoco\OneDrive\Documents\GitHub\MyGoals\MyGoals\obj\Debug\MyGoals.Properties.Resources.resources
+C:\Users\zeoco\OneDrive\Documents\GitHub\MyGoals\MyGoals\obj\Debug\MyGoals.csproj.GenerateResource.cache
+C:\Users\zeoco\OneDrive\Documents\GitHub\MyGoals\MyGoals\obj\Debug\MyGoals.csproj.CoreCompileInputs.cache
+C:\Users\zeoco\OneDrive\Documents\GitHub\MyGoals\MyGoals\obj\Debug\MyGoals.exe
+C:\Users\zeoco\OneDrive\Documents\GitHub\MyGoals\MyGoals\obj\Debug\MyGoals.pdb
