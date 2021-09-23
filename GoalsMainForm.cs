@@ -41,9 +41,14 @@ namespace MyGoals
 
         private void newGoal_Click(object sender, EventArgs e)
         {
-            this.myGoalsList.AddGoal(textBoxTest.Text);
-            TreeNode treeNode = new TreeNode(textBoxTest.Text);
-            treeViewGoals.Nodes.Add(treeNode);
+            NewGoal newGoalForm = new NewGoal();
+            newGoalForm.ShowDialog();
+            if (newGoalForm.getGoalText() != "")
+            {
+                this.myGoalsList.AddGoal(newGoalForm.getGoalText());
+                TreeNode treeNode = new TreeNode(newGoalForm.getGoalText());
+                treeViewGoals.Nodes.Add(treeNode);
+            }
         }
 
         private void treeViewGoals_AfterSelect(object sender, TreeViewEventArgs e)
