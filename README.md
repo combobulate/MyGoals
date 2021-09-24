@@ -17,5 +17,7 @@ Seemed like a good excuse to work on one of my goals, learning Windows Forms wit
 * Add save/load functionality
 * Add time tracking
 * Add search function for partial string match
+* Add ability to clear all goals
+* Add ability to have multiple goal lists
 * Make it look less ugly
 * and more!
