@@ -32,6 +32,7 @@ namespace MyGoals
             this.newGoal = new System.Windows.Forms.Button();
             this.treeViewGoals = new System.Windows.Forms.TreeView();
             this.addChild = new System.Windows.Forms.Button();
+            this.markComplete = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // newGoal
@@ -46,7 +47,6 @@ namespace MyGoals
             // 
             // treeViewGoals
             // 
-            this.treeViewGoals.AfterSelect += treeViewGoals_OnAfterSelect;
             this.treeViewGoals.HideSelection = false;
             this.treeViewGoals.Location = new System.Drawing.Point(29, 159);
             this.treeViewGoals.Name = "treeViewGoals";
@@ -64,11 +64,23 @@ namespace MyGoals
             this.addChild.UseVisualStyleBackColor = true;
             this.addChild.Click += new System.EventHandler(this.addChild_Click);
             // 
+            // markComplete
+            // 
+            this.markComplete.Enabled = false;
+            this.markComplete.Location = new System.Drawing.Point(290, 34);
+            this.markComplete.Name = "markComplete";
+            this.markComplete.Size = new System.Drawing.Size(91, 79);
+            this.markComplete.TabIndex = 5;
+            this.markComplete.Text = "Mark Complete";
+            this.markComplete.UseVisualStyleBackColor = true;
+            this.markComplete.Click += new System.EventHandler(this.markComplete_Click);
+            // 
             // GoalsMainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(860, 623);
+            this.Controls.Add(this.markComplete);
             this.Controls.Add(this.addChild);
             this.Controls.Add(this.treeViewGoals);
             this.Controls.Add(this.newGoal);
@@ -84,6 +96,7 @@ namespace MyGoals
         private System.Windows.Forms.Button newGoal;
         private System.Windows.Forms.TreeView treeViewGoals;
         private System.Windows.Forms.Button addChild;
+        private System.Windows.Forms.Button markComplete;
     }
 }
 

@@ -63,9 +63,9 @@ namespace Classes
             {
                 if (goal.GoalText == Text)
                     return goal;
-                else if (goal.ChildGoals.Count != 0)
+                else if (goal.GetChildGoals(true).Count != 0)
                 {
-                    Goal foundGoal = FindGoal(goal.ChildGoals, Text);
+                    Goal foundGoal = FindGoal(goal.GetChildGoals(true), Text);
                     if (foundGoal != null)
                         return foundGoal;
                 }
@@ -78,25 +78,44 @@ namespace Classes
     public class Goal
     {
         public string GoalText { get; set; }
-        public LinkedList<Goal> ChildGoals = new LinkedList<Goal>();
+        private LinkedList<Goal> ChildGoals = new LinkedList<Goal>();
+        private bool isComplete = false;
         
         public Goal(string Text)
         {
             this.GoalText = Text;
         }
-
+        
         public void AddChild(string Text)
         {
             Goal childGoal = new Goal(Text);
             this.ChildGoals.AddLast(childGoal);
         }
 
-        /*
-        public void AddChild(string Text, int Position)
+        public void CompleteGoal()
         {
-            Goal childGoal = new Goal(Text);
-            this.ChildGoals.AddAfter(childGoal);
-        }*/
+            isComplete = true;
+        }
 
+        public bool IsComplete()
+        {
+            return isComplete;
+        }
+
+        public LinkedList<Goal> GetChildGoals(bool activeOnly)
+        {
+            if (activeOnly)
+            {
+                LinkedList<Goal> activeChildGoals = new LinkedList<Goal>();
+                foreach (Goal goal in ChildGoals)
+                {
+                    if (!goal.isComplete)
+                        activeChildGoals.AddLast(goal);
+                }
+                return activeChildGoals;
+            }
+            else
+                return ChildGoals;
+        }
     }
 }
