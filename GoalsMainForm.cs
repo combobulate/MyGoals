@@ -17,6 +17,8 @@ namespace MyGoals
         public GoalsMainForm()
         {
             InitializeComponent();
+            treeViewGoals.AfterSelect += treeViewGoals_OnAfterSelect;
+
             myGoalsList.AddGoal("Starter Set");
             myGoalsList.AddGoal("Starter Set 2");
             Classes.Goal goal = myGoalsList.SearchGoals("Starter Set");
@@ -35,8 +37,8 @@ namespace MyGoals
             {
                 TreeNode treeNode = new TreeNode(goal.GoalText);
                 treeViewGoals.Nodes.Add(treeNode);
-                if (goal.ChildGoals.Count != 0)
-                    treeViewPrintGoals(treeNode, goal.ChildGoals);
+                if (goal.GetChildGoals(true).Count != 0)
+                    treeViewPrintGoals(treeNode, goal.GetChildGoals(true));
             }
         }
 
@@ -55,16 +57,25 @@ namespace MyGoals
         private void treeViewGoals_OnAfterSelect(object sender, TreeViewEventArgs e)
         {
             addChild.Enabled = true;
+            Classes.Goal goal = myGoalsList.SearchGoals(treeViewGoals.SelectedNode.Text);
+            if (goal.GetChildGoals(true).Count == 0)
+                markComplete.Enabled = true;
+            else
+                markComplete.Enabled = false;
         }
 
         private void treeViewPrintGoals(TreeNode tree, LinkedList<Classes.Goal> goals)
         {
             foreach(Classes.Goal goal in goals)
             {
-                TreeNode treeNode = new TreeNode(goal.GoalText);
-                tree.Nodes.Add(treeNode);
-                if (goal.ChildGoals.Count != 0)
-                    treeViewPrintGoals(treeNode, goal.ChildGoals);
+                if (!goal.IsComplete())
+                {
+                    TreeNode treeNode = new TreeNode(goal.GoalText);
+                    tree.Nodes.Add(treeNode);
+                    if (goal.GetChildGoals(true).Count != 0)
+                        treeViewPrintGoals(treeNode, goal.GetChildGoals(true));
+                }
+                
             }
             
         }
@@ -73,7 +84,6 @@ namespace MyGoals
         {
             NewGoal newGoalForm = new NewGoal();
             newGoalForm.ShowDialog();
-            //treeViewGoals.SelectedNode.Text
 
             if (newGoalForm.getGoalText() != "")
             {
@@ -84,6 +94,17 @@ namespace MyGoals
                 if (!treeViewGoals.SelectedNode.IsExpanded)
                     treeViewGoals.SelectedNode.Expand();
             }
+        }
+
+        private void markComplete_Click(object sender, EventArgs e)
+        {
+            if (treeViewGoals.SelectedNode != null)
+            {
+                Classes.Goal goal = myGoalsList.SearchGoals(treeViewGoals.SelectedNode.Text);
+                goal.CompleteGoal();
+                treeViewGoals.SelectedNode.Remove();
+            }
+
         }
     }
 }
