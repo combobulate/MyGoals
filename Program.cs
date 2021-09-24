@@ -25,11 +25,16 @@ namespace Classes
 {
     public class Goals
     {
-        public LinkedList<Goal> MyGoals = new LinkedList<Goal>();
+        private LinkedList<Goal> MyGoals = new LinkedList<Goal>();
 
         public Goals()
         {
 
+        }
+
+        public LinkedList<Goal> GetGoals()
+        {
+            return MyGoals;
         }
 
         public void AddGoal(string Text)
@@ -48,12 +53,23 @@ namespace Classes
             return output;
         }
 
-        public Goal FindGoal(string Text)
+        public Goal SearchGoals(string Text)
         {
-            foreach (Goal goal in MyGoals)
+            return FindGoal(MyGoals, Text);
+        }
+        private Goal FindGoal(LinkedList<Goal> goals, string Text)
+        {
+            foreach (Goal goal in goals)
             {
                 if (goal.GoalText == Text)
                     return goal;
+                else if (goal.ChildGoals.Count != 0)
+                {
+                    Goal foundGoal = FindGoal(goal.ChildGoals, Text);
+                    if (foundGoal != null)
+                        return foundGoal;
+                }
+                    
             }
             return null;
         }

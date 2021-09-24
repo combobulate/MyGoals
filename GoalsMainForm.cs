@@ -19,18 +19,19 @@ namespace MyGoals
             InitializeComponent();
             myGoalsList.AddGoal("Starter Set");
             myGoalsList.AddGoal("Starter Set 2");
-            Classes.Goal goal = myGoalsList.FindGoal("Starter Set");
+            Classes.Goal goal = myGoalsList.SearchGoals("Starter Set");
             goal.AddChild("Test child 1");
             goal.AddChild("Test child 2");
-            goal = myGoalsList.FindGoal("Starter Set 2");
+            goal = myGoalsList.SearchGoals("Starter Set 2");
             goal.AddChild("Test child 3");
             goal.AddChild("Test child 4");
+            
         }
 
         private void GoalsMainForm_Load(object sender, EventArgs e)
         {
             //treeViewPrintGoals(myGoalsList.MyGoals);
-            foreach (Classes.Goal goal in myGoalsList.MyGoals)
+            foreach (Classes.Goal goal in myGoalsList.GetGoals())
             {
                 TreeNode treeNode = new TreeNode(goal.GoalText);
                 treeViewGoals.Nodes.Add(treeNode);
@@ -51,9 +52,9 @@ namespace MyGoals
             }
         }
 
-        private void treeViewGoals_AfterSelect(object sender, TreeViewEventArgs e)
+        private void treeViewGoals_OnAfterSelect(object sender, TreeViewEventArgs e)
         {
-
+            addChild.Enabled = true;
         }
 
         private void treeViewPrintGoals(TreeNode tree, LinkedList<Classes.Goal> goals)
@@ -68,6 +69,22 @@ namespace MyGoals
             
         }
 
+        private void addChild_Click(object sender, EventArgs e)
+        {
+            NewGoal newGoalForm = new NewGoal();
+            newGoalForm.ShowDialog();
+            //treeViewGoals.SelectedNode.Text
+
+            if (newGoalForm.getGoalText() != "")
+            {
+                Classes.Goal goal = myGoalsList.SearchGoals(treeViewGoals.SelectedNode.Text);
+                goal.AddChild(newGoalForm.getGoalText());
+                TreeNode treeNode = new TreeNode(newGoalForm.getGoalText());
+                treeViewGoals.SelectedNode.Nodes.Add(treeNode);
+                if (!treeViewGoals.SelectedNode.IsExpanded)
+                    treeViewGoals.SelectedNode.Expand();
+            }
+        }
     }
 }
 
