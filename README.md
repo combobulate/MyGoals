@@ -7,12 +7,11 @@ I have a problem. I have goals of all sizes, and so I wind up creating many To D
 Seemed like a good excuse to work on one of my goals, learning Windows Forms with C#.
 
 # Current state of the project:
-* I can add goals, and children of goals!
+* I can add primary and child goals, and complete goals with no children!
 * There's a bunch of blank space to fill with other content
 * There's some spoof data loaded automatically
 
 # To do list for this to do app:
-* Add ability to mark goals complete
 * Add ability to toggle viewing completed goals
 * Add toggles to minimize all/maximize selected and children
 * Add save/load functionality
