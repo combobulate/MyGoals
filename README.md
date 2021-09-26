@@ -9,12 +9,12 @@ Seemed like a good excuse to work on one of my goals, learning Windows Forms wit
 # Current state of the project:
 * I can add primary and child goals, and complete goals with no children!
 * There's a bunch of blank space to fill with other content
-* There's some spoof data loaded automatically
+* On launch it loads data from a save file if any exists, and you can press "save and quit" to do what it sounds like
 
 # To do list for this to do app:
 * Add ability to toggle viewing completed goals
 * Add toggles to minimize all/maximize selected and children
-* Add save/load functionality
+* Save new changes as they are made
 * Add time tracking
 * Add search function for partial string match
 * Add ability to clear all goals
