@@ -7,7 +7,7 @@ I have a problem. I have goals of all sizes, and so I wind up creating many To D
 Seemed like a good excuse to work on one of my goals, learning Windows Forms with C#.
 
 # Current state of the project:
-* I can add primary and child goals, and complete goals with no children!
+* I can add primary and child goals and children of children of children etc, and complete goals with no children!
 * There's a bunch of blank space to fill with other content
 * On launch it loads data from a save file if any exists, and you can press "save and quit" to do what it sounds like
 
@@ -20,4 +20,5 @@ Seemed like a good excuse to work on one of my goals, learning Windows Forms wit
 * Add ability to clear all goals
 * Add ability to have multiple goal lists
 * Make it look less ugly
+* Go through and refactor stuff that could be improved
 * and more!
