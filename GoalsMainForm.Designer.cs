@@ -29,6 +29,7 @@ namespace MyGoals
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GoalsMainForm));
             this.newGoal = new System.Windows.Forms.Button();
             this.treeViewGoals = new System.Windows.Forms.TreeView();
             this.addChild = new System.Windows.Forms.Button();
@@ -96,6 +97,7 @@ namespace MyGoals
             this.Controls.Add(this.addChild);
             this.Controls.Add(this.treeViewGoals);
             this.Controls.Add(this.newGoal);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "GoalsMainForm";
             this.Text = "My Goal Tracker";
             this.Load += new System.EventHandler(this.GoalsMainForm_Load);
