@@ -29,6 +29,7 @@ namespace MyGoals
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NewGoal));
             this.inputText = new System.Windows.Forms.TextBox();
             this.okay = new System.Windows.Forms.Button();
             this.cancel = new System.Windows.Forms.Button();
@@ -80,6 +81,7 @@ namespace MyGoals
             this.Controls.Add(this.cancel);
             this.Controls.Add(this.okay);
             this.Controls.Add(this.inputText);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "NewGoal";
             this.Text = "NewGoal";
             this.ResumeLayout(false);
