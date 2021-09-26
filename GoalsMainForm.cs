@@ -12,33 +12,37 @@ namespace MyGoals
 {
     public partial class GoalsMainForm : Form
     {
-        Classes.Goals myGoalsList = new Classes.Goals();
+        GoalManagement.Goals myGoalsList = new GoalManagement.Goals();
         
         public GoalsMainForm()
         {
             InitializeComponent();
             treeViewGoals.AfterSelect += treeViewGoals_OnAfterSelect;
-
-            myGoalsList.AddGoal("Starter Set");
+            myGoalsList.Load();
+            /*myGoalsList.AddGoal("Starter Set");
             myGoalsList.AddGoal("Starter Set 2");
-            Classes.Goal goal = myGoalsList.SearchGoals("Starter Set");
+            GoalManagement.Goal goal = myGoalsList.SearchGoals("Starter Set");
             goal.AddChild("Test child 1");
             goal.AddChild("Test child 2");
             goal = myGoalsList.SearchGoals("Starter Set 2");
             goal.AddChild("Test child 3");
-            goal.AddChild("Test child 4");
+            goal.AddChild("Test child 5");*/
+
+            //
             
         }
 
         private void GoalsMainForm_Load(object sender, EventArgs e)
         {
-            //treeViewPrintGoals(myGoalsList.MyGoals);
-            foreach (Classes.Goal goal in myGoalsList.GetGoals())
+            foreach (GoalManagement.Goal goal in myGoalsList.GetGoals())
             {
-                TreeNode treeNode = new TreeNode(goal.GoalText);
-                treeViewGoals.Nodes.Add(treeNode);
-                if (goal.GetChildGoals(true).Count != 0)
-                    treeViewPrintGoals(treeNode, goal.GetChildGoals(true));
+                if (!goal.IsComplete())
+                {
+                    TreeNode treeNode = new TreeNode(goal.GoalText);
+                    treeViewGoals.Nodes.Add(treeNode);
+                    if (goal.GetChildGoals(true).Count != 0)
+                        treeViewPrintGoals(treeNode, goal.GetChildGoals(true));
+                }
             }
         }
 
@@ -57,16 +61,16 @@ namespace MyGoals
         private void treeViewGoals_OnAfterSelect(object sender, TreeViewEventArgs e)
         {
             addChild.Enabled = true;
-            Classes.Goal goal = myGoalsList.SearchGoals(treeViewGoals.SelectedNode.Text);
+            GoalManagement.Goal goal = myGoalsList.SearchGoals(treeViewGoals.SelectedNode.Text);
             if (goal.GetChildGoals(true).Count == 0)
                 markComplete.Enabled = true;
             else
                 markComplete.Enabled = false;
         }
 
-        private void treeViewPrintGoals(TreeNode tree, LinkedList<Classes.Goal> goals)
+        private void treeViewPrintGoals(TreeNode tree, LinkedList<GoalManagement.Goal> goals)
         {
-            foreach(Classes.Goal goal in goals)
+            foreach(GoalManagement.Goal goal in goals)
             {
                 if (!goal.IsComplete())
                 {
@@ -87,7 +91,7 @@ namespace MyGoals
 
             if (newGoalForm.getGoalText() != "")
             {
-                Classes.Goal goal = myGoalsList.SearchGoals(treeViewGoals.SelectedNode.Text);
+                GoalManagement.Goal goal = myGoalsList.SearchGoals(treeViewGoals.SelectedNode.Text);
                 goal.AddChild(newGoalForm.getGoalText());
                 TreeNode treeNode = new TreeNode(newGoalForm.getGoalText());
                 treeViewGoals.SelectedNode.Nodes.Add(treeNode);
@@ -100,11 +104,16 @@ namespace MyGoals
         {
             if (treeViewGoals.SelectedNode != null)
             {
-                Classes.Goal goal = myGoalsList.SearchGoals(treeViewGoals.SelectedNode.Text);
+                GoalManagement.Goal goal = myGoalsList.SearchGoals(treeViewGoals.SelectedNode.Text);
                 goal.CompleteGoal();
                 treeViewGoals.SelectedNode.Remove();
             }
 
+        }
+        private void saveAndQuit_Click(object sender, EventArgs e)
+        {
+            myGoalsList.Save();
+            Application.Exit();
         }
     }
 }

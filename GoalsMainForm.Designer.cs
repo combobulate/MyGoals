@@ -33,6 +33,7 @@ namespace MyGoals
             this.treeViewGoals = new System.Windows.Forms.TreeView();
             this.addChild = new System.Windows.Forms.Button();
             this.markComplete = new System.Windows.Forms.Button();
+            this.saveAndQuit = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // newGoal
@@ -75,11 +76,22 @@ namespace MyGoals
             this.markComplete.UseVisualStyleBackColor = true;
             this.markComplete.Click += new System.EventHandler(this.markComplete_Click);
             // 
+            // saveAndQuit
+            // 
+            this.saveAndQuit.Location = new System.Drawing.Point(421, 34);
+            this.saveAndQuit.Name = "saveAndQuit";
+            this.saveAndQuit.Size = new System.Drawing.Size(91, 79);
+            this.saveAndQuit.TabIndex = 6;
+            this.saveAndQuit.Text = "Save and Quit";
+            this.saveAndQuit.UseVisualStyleBackColor = true;
+            this.saveAndQuit.Click += new System.EventHandler(this.saveAndQuit_Click);
+            // 
             // GoalsMainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(860, 623);
+            this.Controls.Add(this.saveAndQuit);
             this.Controls.Add(this.markComplete);
             this.Controls.Add(this.addChild);
             this.Controls.Add(this.treeViewGoals);
@@ -97,6 +109,7 @@ namespace MyGoals
         private System.Windows.Forms.TreeView treeViewGoals;
         private System.Windows.Forms.Button addChild;
         private System.Windows.Forms.Button markComplete;
+        private System.Windows.Forms.Button saveAndQuit;
     }
 }
 

@@ -1,2 +1,3 @@
 obj/
 *.cache
+bin/Debug/files/mySaveFile.Xml
