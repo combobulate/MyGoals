@@ -28,11 +28,17 @@ namespace GoalManagement
 {
     public class Goals
     {
+        /// <summary>
+        /// The main goal management class
+        /// </summary>
         private LinkedList<Goal> MyGoals = new LinkedList<Goal>();
         private string saveLocation = @"files/mySaveFile.Xml";
+
+        /// <summary>
+        /// Make a new save file if one doesn't exist already
+        /// </summary> 
         public Goals()
-        {
-            // Initialize save file if one doesn't exist already
+        {            
             if (!File.Exists(saveLocation))
             {
                 XmlWriter writer = XmlWriter.Create(saveLocation);
@@ -45,11 +51,17 @@ namespace GoalManagement
             }
         }
 
+        /// <summary>
+        /// Accessor for the root goals list
+        /// </summary> 
         public LinkedList<Goal> GetGoals()
         {
             return MyGoals;
         }
 
+        /// <summary>
+        /// Add a new root goal 
+        /// </summary>
         public Goal AddGoal(string Text)
         {
             Goal rootGoal = new Goal(Text);
@@ -57,20 +69,17 @@ namespace GoalManagement
             return MyGoals.Last();
         }
 
-        public string ListGoals()
-        {
-            string output = "";
-            foreach (Goal goal in this.MyGoals)
-            {
-                output += goal.GoalText;
-            }
-            return output;
-        }
-
+        /// <summary>
+        /// Exact string match search
+        /// </summary>
         public Goal SearchGoals(string Text)
         {
             return FindGoal(MyGoals, Text);
         }
+
+        /// <summary>
+        /// Recursive search function to go through goal list
+        /// </summary>
         private Goal FindGoal(LinkedList<Goal> goals, string Text)
         {
             foreach (Goal goal in goals)
@@ -88,6 +97,9 @@ namespace GoalManagement
             return null;
         }
 
+        /// <summary>
+        /// Saves current state of all goals in memory
+        /// </summary>
         public void Save()
         {
             XmlTextWriter writer = new XmlTextWriter(saveLocation, null);
@@ -100,6 +112,9 @@ namespace GoalManagement
             writer.Close();
         }
 
+        /// <summary>
+        /// Recursive function for saving goals based on presence in passed in list
+        /// </summary>
         private void SaveGoals(LinkedList<Goal> goals, XmlTextWriter writer)
         {
             foreach (Goal goal in goals)
@@ -109,12 +124,12 @@ namespace GoalManagement
 
                 // Goal text element
                 writer.WriteStartElement("GoalText");
-                writer.WriteString(goal.Text());
+                writer.WriteString(goal.GoalText);
                 writer.WriteEndElement();
 
                 // Goal isComplete element
                 writer.WriteStartElement("IsComplete");
-                writer.WriteString(goal.IsComplete().ToString());
+                writer.WriteString(goal.IsComplete.ToString());
                 writer.WriteEndElement();
 
                 // Add each child goal as a child goal element
@@ -128,18 +143,47 @@ namespace GoalManagement
             }
         }
 
+        /// <summary>
+        /// Loads goals from save file into memory
+        /// </summary>
         public void Load()
         {
             XmlTextReader reader = new XmlTextReader(saveLocation);
 
-            // Advance to first node
+            // Advance to first node before calling recursive loader
             reader.Read();
-
             LoadGoals(null, reader);
 
             reader.Close();
         }
 
+        /// <summary>
+        /// Recursive function for loading goals from file. File structure is expected like:
+        /// <?xml version="1.0"?>
+        /// < root >
+        ///    < goal >
+        ///       < GoalText > First level goal name </ GoalText >
+        ///       < IsComplete > True </ IsComplete >
+        ///       < goal >
+        ///          < GoalText > Second level goal name </ GoalText >
+        ///          < IsComplete > True </ IsComplete >
+        ///       </ goal >
+        ///       < goal >
+        ///          < GoalText > Another second level goal name</ GoalText >
+        ///          < IsComplete > True </ IsComplete >
+        ///             < goal >
+        ///                < GoalText > Third level goal name </ GoalText >
+        ///                < IsComplete > True </ IsComplete >
+        ///             </ goal >
+        ///       </ goal >
+        ///    </ goal >
+        ///    < goal >
+        ///       < GoalText > Another first level goal name </ GoalText >
+        ///       < IsComplete > True </ IsComplete >
+        /// ...
+        /// < /root >
+        /// IE all goals have a base set of elements, and may have one or more child goals.
+        /// </summary>
         private void LoadGoals(Goal goal, XmlTextReader reader)
         {
             Goal newGoal = new Goal("");
@@ -149,6 +193,9 @@ namespace GoalManagement
 
             do
             {
+                // Relevant node types are Element, EndElement, and Text. The first two are used to set flags indicating
+                // how to handle the next node. "goal" is the only Element without a following Text. Encountering a new
+                // "goal" while already in a goal calls this function again to be handled on that child goal level.
                 if (reader.NodeType == XmlNodeType.Element)
                 {
                     switch (reader.Name)
@@ -207,20 +254,28 @@ namespace GoalManagement
 
     public class Goal
     {
+        /// <summary>
+        /// The goal class itself
+        /// </summary>
         public string GoalText { get; set; }
+        public bool IsComplete { get; set; }
         private LinkedList<Goal> ChildGoals = new LinkedList<Goal>();
-        private bool isComplete = false;
-        
+
+        /// <summary>
+        /// Goal initializer takes a string as the goal text ad defaults the goal to not complete.
+        /// </summary>
+        /// <param name="Text">The text for the goal</param>
         public Goal(string Text)
         {
             this.GoalText = Text;
+            this.IsComplete = false;
         }
 
-        public string Text()
-        {
-            return GoalText;
-        }
-        
+        /// <summary>
+        /// Adds a child to this goal.
+        /// </summary>
+        /// <param name="Text">The text for the child goal</param>
+        /// <returns>The newly added child goal</returns>
         public Goal AddChild(string Text)
         {
             Goal childGoal = new Goal(Text);
@@ -228,24 +283,28 @@ namespace GoalManagement
             return ChildGoals.Last();
         }
 
+        /// <summary>
+        /// Marks goal complete, if the goal has no incomplete children.
+        /// </summary>
         public void CompleteGoal()
         {
-            isComplete = true;
+            if (this.GetChildGoals(true).Count == 0)
+                IsComplete = true;
         }
 
-        public bool IsComplete()
+        /// <summary>
+        /// Gets children of this goal.
+        /// </summary>
+        /// <param name="incompleteOnly">If true, gets incomplete child goals only; if false, gets all children</param>
+        /// <returns>Linked list of goals (incomplete or all, depending on input parameter) which are children of this goal</returns>
+        public LinkedList<Goal> GetChildGoals(bool incompleteOnly)
         {
-            return isComplete;
-        }
-
-        public LinkedList<Goal> GetChildGoals(bool activeOnly)
-        {
-            if (activeOnly)
+            if (incompleteOnly)
             {
                 LinkedList<Goal> activeChildGoals = new LinkedList<Goal>();
                 foreach (Goal goal in ChildGoals)
                 {
-                    if (!goal.isComplete)
+                    if (!goal.IsComplete)
                         activeChildGoals.AddLast(goal);
                 }
                 return activeChildGoals;
@@ -253,10 +312,5 @@ namespace GoalManagement
             else
                 return ChildGoals;
         }
-    }
-
-    public class XmlData
-    {
-        
     }
 }

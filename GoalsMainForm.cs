@@ -12,31 +12,20 @@ namespace MyGoals
 {
     public partial class GoalsMainForm : Form
     {
-        GoalManagement.Goals myGoalsList = new GoalManagement.Goals();
+        private GoalManagement.Goals myGoalsList = new GoalManagement.Goals();
         
         public GoalsMainForm()
         {
             InitializeComponent();
             treeViewGoals.AfterSelect += treeViewGoals_OnAfterSelect;
-            myGoalsList.Load();
-            /*myGoalsList.AddGoal("Starter Set");
-            myGoalsList.AddGoal("Starter Set 2");
-            GoalManagement.Goal goal = myGoalsList.SearchGoals("Starter Set");
-            goal.AddChild("Test child 1");
-            goal.AddChild("Test child 2");
-            goal = myGoalsList.SearchGoals("Starter Set 2");
-            goal.AddChild("Test child 3");
-            goal.AddChild("Test child 5");*/
-
-            //
-            
+            myGoalsList.Load();            
         }
 
         private void GoalsMainForm_Load(object sender, EventArgs e)
         {
             foreach (GoalManagement.Goal goal in myGoalsList.GetGoals())
             {
-                if (!goal.IsComplete())
+                if (!goal.IsComplete)
                 {
                     TreeNode treeNode = new TreeNode(goal.GoalText);
                     treeViewGoals.Nodes.Add(treeNode);
@@ -72,7 +61,7 @@ namespace MyGoals
         {
             foreach(GoalManagement.Goal goal in goals)
             {
-                if (!goal.IsComplete())
+                if (!goal.IsComplete)
                 {
                     TreeNode treeNode = new TreeNode(goal.GoalText);
                     tree.Nodes.Add(treeNode);
