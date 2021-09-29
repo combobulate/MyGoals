@@ -50,9 +50,9 @@ namespace MyGoals
             // treeViewGoals
             // 
             this.treeViewGoals.HideSelection = false;
-            this.treeViewGoals.Location = new System.Drawing.Point(29, 159);
+            this.treeViewGoals.Location = new System.Drawing.Point(36, 159);
             this.treeViewGoals.Name = "treeViewGoals";
-            this.treeViewGoals.Size = new System.Drawing.Size(251, 432);
+            this.treeViewGoals.Size = new System.Drawing.Size(476, 432);
             this.treeViewGoals.TabIndex = 3;
             // 
             // addChild
@@ -91,7 +91,7 @@ namespace MyGoals
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(860, 623);
+            this.ClientSize = new System.Drawing.Size(546, 623);
             this.Controls.Add(this.saveAndQuit);
             this.Controls.Add(this.markComplete);
             this.Controls.Add(this.addChild);
