@@ -17,6 +17,17 @@ namespace MyGoals
         {
             InitializeComponent();
             string goalText = "";
+            this.inputText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(CheckKeys);
+        }
+
+        private void CheckKeys(object sender, System.Windows.Forms.KeyPressEventArgs e)
+        {
+            // Behavior when pressing Enter key while in text field
+            if (e.KeyChar == (char)13)
+            {
+                goalText = inputText.Text;
+                this.Close();
+            }
         }
 
         private void okay_Click(object sender, EventArgs e)
