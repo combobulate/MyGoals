@@ -35,22 +35,11 @@ namespace MyGoals
             }
         }
 
-        private void newGoal_Click(object sender, EventArgs e)
-        {
-            NewGoal newGoalForm = new NewGoal();
-            newGoalForm.ShowDialog();
-            if (newGoalForm.getGoalText() != "")
-            {
-                this.myGoalsList.AddGoal(newGoalForm.getGoalText());
-                TreeNode treeNode = new TreeNode(newGoalForm.getGoalText());
-                treeViewGoals.Nodes.Add(treeNode);
-            }
-        }
 
         private void treeViewGoals_OnAfterSelect(object sender, TreeViewEventArgs e)
         {
             addChild.Enabled = true;
-            GoalManagement.Goal goal = myGoalsList.SearchGoals(treeViewGoals.SelectedNode.Text);
+            GoalManagement.Goal goal = myGoalsList.GetSelectedGoal(treeViewGoals.SelectedNode.FullPath, true);
             if (goal.GetChildGoals(true).Count == 0)
                 markComplete.Enabled = true;
             else
@@ -73,6 +62,27 @@ namespace MyGoals
             
         }
 
+        private void newGoal_Click(object sender, EventArgs e)
+        {
+            NewGoal newGoalForm = new NewGoal();
+            newGoalForm.ShowDialog();
+
+            if (newGoalForm.getGoalText() != "")
+            {
+                GoalManagement.Goal existingGoal = myGoalsList.GetSelectedGoal(newGoalForm.getGoalText(), false);
+                
+                if (existingGoal is null)
+                {
+                    this.myGoalsList.AddGoal(newGoalForm.getGoalText());
+                    TreeNode treeNode = new TreeNode(newGoalForm.getGoalText());
+                    treeViewGoals.Nodes.Add(treeNode);
+                }
+                else if (existingGoal.IsComplete)
+                    MessageBox.Show("That goal has already been added and completed.");
+                else
+                    MessageBox.Show("That goal has already been added.");
+            }
+        }
         private void addChild_Click(object sender, EventArgs e)
         {
             NewGoal newGoalForm = new NewGoal();
@@ -80,12 +90,20 @@ namespace MyGoals
 
             if (newGoalForm.getGoalText() != "")
             {
-                GoalManagement.Goal goal = myGoalsList.SearchGoals(treeViewGoals.SelectedNode.Text);
-                goal.AddChild(newGoalForm.getGoalText());
-                TreeNode treeNode = new TreeNode(newGoalForm.getGoalText());
-                treeViewGoals.SelectedNode.Nodes.Add(treeNode);
-                if (!treeViewGoals.SelectedNode.IsExpanded)
-                    treeViewGoals.SelectedNode.Expand();
+                GoalManagement.Goal goal = myGoalsList.GetSelectedGoal(treeViewGoals.SelectedNode.FullPath, true);
+                GoalManagement.Goal existingGoal = myGoalsList.GetSelectedGoal(treeViewGoals.SelectedNode.FullPath + "\\" + newGoalForm.getGoalText(), false);
+                if (existingGoal is null)
+                {
+                    goal.AddChild(newGoalForm.getGoalText());
+                    TreeNode treeNode = new TreeNode(newGoalForm.getGoalText());
+                    treeViewGoals.SelectedNode.Nodes.Add(treeNode);
+                    if (!treeViewGoals.SelectedNode.IsExpanded)
+                        treeViewGoals.SelectedNode.Expand();
+                }
+                else if (existingGoal.IsComplete)
+                    MessageBox.Show("That goal has already been added and completed.");
+                else
+                    MessageBox.Show("That goal has already been added.");
             }
         }
 
@@ -93,7 +111,7 @@ namespace MyGoals
         {
             if (treeViewGoals.SelectedNode != null)
             {
-                GoalManagement.Goal goal = myGoalsList.SearchGoals(treeViewGoals.SelectedNode.Text);
+                GoalManagement.Goal goal = myGoalsList.GetSelectedGoal(treeViewGoals.SelectedNode.FullPath, true);
                 goal.CompleteGoal();
                 treeViewGoals.SelectedNode.Remove();
             }
