@@ -69,6 +69,31 @@ namespace GoalManagement
             return MyGoals.Last();
         }
 
+        public Goal GetSelectedGoal(string GoalPath, bool IncompleteOnly)
+        {
+            return GetGoal(MyGoals, GoalPath, IncompleteOnly);
+        }
+
+        public Goal GetGoal(LinkedList<Goal> goals, string GoalPath, bool IncompleteOnly)
+        {
+            int nextLevel = GoalPath.IndexOf("\\");
+            string thisGoal = GoalPath;
+            if (nextLevel != -1)
+                thisGoal = GoalPath.Substring(0, nextLevel);
+            
+            foreach (Goal goal in goals)
+            {
+                if (goal.GoalText == thisGoal)
+                {
+                    if (nextLevel != -1)
+                        return GetGoal(goal.GetChildGoals(IncompleteOnly), GoalPath.Substring(nextLevel + 1), IncompleteOnly); 
+                    else
+                        return goal;
+                }    
+            }
+            return null;            
+        }
+
         /// <summary>
         /// Exact string match search
         /// </summary>
