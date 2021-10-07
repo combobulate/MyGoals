@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
+using System.Web.UI;
 
 namespace MyGoals
 {
@@ -277,22 +278,22 @@ namespace GoalManagement
         }
     }
 
-    public class Goal
+    public class GoalNode : TreeNode
     {
         /// <summary>
         /// The goal class itself
         /// </summary>
-        public string GoalText { get; set; }
+        //public string GoalText { get; set; }
         public bool IsComplete { get; set; }
-        private LinkedList<Goal> ChildGoals = new LinkedList<Goal>();
+        //private LinkedList<Goal> ChildGoals = new LinkedList<Goal>();
 
         /// <summary>
         /// Goal initializer takes a string as the goal text ad defaults the goal to not complete.
         /// </summary>
         /// <param name="Text">The text for the goal</param>
-        public Goal(string Text)
+        public GoalNode(string Text)
         {
-            this.GoalText = Text;
+            this.Text = Text;
             this.IsComplete = false;
         }
 
@@ -301,12 +302,13 @@ namespace GoalManagement
         /// </summary>
         /// <param name="Text">The text for the child goal</param>
         /// <returns>The newly added child goal</returns>
+        /*
         public Goal AddChild(string Text)
         {
             Goal childGoal = new Goal(Text);
             this.ChildGoals.AddLast(childGoal);
             return ChildGoals.Last();
-        }
+        }*/
 
         /// <summary>
         /// Marks goal complete, if the goal has no incomplete children.
@@ -322,9 +324,9 @@ namespace GoalManagement
         /// </summary>
         /// <param name="incompleteOnly">If true, gets incomplete child goals only; if false, gets all children</param>
         /// <returns>Linked list of goals (incomplete or all, depending on input parameter) which are children of this goal</returns>
-        public LinkedList<Goal> GetChildGoals(bool incompleteOnly)
+        public TreeNodeCollection GetChildGoals(bool incompleteOnly)
         {
-            if (incompleteOnly)
+            /*if (incompleteOnly)
             {
                 LinkedList<Goal> activeChildGoals = new LinkedList<Goal>();
                 foreach (Goal goal in ChildGoals)
@@ -335,7 +337,8 @@ namespace GoalManagement
                 return activeChildGoals;
             }
             else
-                return ChildGoals;
+                return ChildGoals;*/
+            return this.
         }
     }
 }
