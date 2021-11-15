@@ -8,6 +8,8 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Web.UI;
 
+
+
 namespace MyGoals
 {
     static class Program
@@ -32,7 +34,7 @@ namespace GoalManagement
         /// <summary>
         /// The main goal management class
         /// </summary>
-        private LinkedList<Goal> MyGoals = new LinkedList<Goal>();
+        private GoalNode MyGoals = new GoalNode("root");
         private string saveLocation = @"files/mySaveFile.Xml";
 
         /// <summary>
@@ -55,7 +57,7 @@ namespace GoalManagement
         /// <summary>
         /// Accessor for the root goals list
         /// </summary> 
-        public LinkedList<Goal> GetGoals()
+        public GoalNode GetGoals()
         {
             return MyGoals;
         }
@@ -63,31 +65,29 @@ namespace GoalManagement
         /// <summary>
         /// Add a new root goal 
         /// </summary>
-        public Goal AddGoal(string Text)
+        public GoalNode AddGoal(string Text)
         {
-            Goal rootGoal = new Goal(Text);
-            MyGoals.AddLast(rootGoal);
-            return MyGoals.Last();
+            return MyGoals.AddChild(Text);
         }
 
-        public Goal GetSelectedGoal(string GoalPath, bool IncompleteOnly)
+        public GoalNode GetSelectedGoal(string GoalPath, bool IncompleteOnly)
         {
             return GetGoal(MyGoals, GoalPath, IncompleteOnly);
         }
 
-        public Goal GetGoal(LinkedList<Goal> goals, string GoalPath, bool IncompleteOnly)
+        public GoalNode GetGoal(GoalNode goals, string GoalPath, bool IncompleteOnly)
         {
             int nextLevel = GoalPath.IndexOf("\\");
             string thisGoal = GoalPath;
             if (nextLevel != -1)
                 thisGoal = GoalPath.Substring(0, nextLevel);
             
-            foreach (Goal goal in goals)
+            foreach (GoalNode goal in goals.Nodes)
             {
-                if (goal.GoalText == thisGoal)
+                if (goal.Text == thisGoal)
                 {
                     if (nextLevel != -1)
-                        return GetGoal(goal.GetChildGoals(IncompleteOnly), GoalPath.Substring(nextLevel + 1), IncompleteOnly); 
+                        return GetGoal(goal, GoalPath.Substring(nextLevel + 1), IncompleteOnly); 
                     else
                         return goal;
                 }    
@@ -98,7 +98,7 @@ namespace GoalManagement
         /// <summary>
         /// Exact string match search
         /// </summary>
-        public Goal SearchGoals(string Text)
+        public GoalNode SearchGoals(string Text)
         {
             return FindGoal(MyGoals, Text);
         }
@@ -106,15 +106,15 @@ namespace GoalManagement
         /// <summary>
         /// Recursive search function to go through goal list
         /// </summary>
-        private Goal FindGoal(LinkedList<Goal> goals, string Text)
+        private GoalNode FindGoal(GoalNode goals, string Text)
         {
-            foreach (Goal goal in goals)
+            foreach (GoalNode goal in goals.Nodes)
             {
-                if (goal.GoalText == Text)
+                if (goal.Text == Text)
                     return goal;
-                else if (goal.GetChildGoals(true).Count != 0)
+                else if (goal.IncompleteChildGoals())
                 {
-                    Goal foundGoal = FindGoal(goal.GetChildGoals(true), Text);
+                    GoalNode foundGoal = FindGoal(goal, Text);
                     if (foundGoal != null)
                         return foundGoal;
                 }
@@ -141,16 +141,16 @@ namespace GoalManagement
         /// <summary>
         /// Recursive function for saving goals based on presence in passed in list
         /// </summary>
-        private void SaveGoals(LinkedList<Goal> goals, XmlTextWriter writer)
+        private void SaveGoals(GoalNode goals, XmlTextWriter writer)
         {
-            foreach (Goal goal in goals)
+            foreach (GoalNode goal in goals.Nodes)
             {
                 // Start this goal node
                 writer.WriteStartElement("goal");
 
                 // Goal text element
                 writer.WriteStartElement("GoalText");
-                writer.WriteString(goal.GoalText);
+                writer.WriteString(goal.Text);
                 writer.WriteEndElement();
 
                 // Goal isComplete element
@@ -159,9 +159,9 @@ namespace GoalManagement
                 writer.WriteEndElement();
 
                 // Add each child goal as a child goal element
-                if (goal.GetChildGoals(false).Count != 0)
+                if (goal.IncompleteChildGoals())
                 {
-                    SaveGoals(goal.GetChildGoals(false), writer);
+                    SaveGoals(goal, writer);
                 }
 
                 // End this goal node
@@ -210,9 +210,9 @@ namespace GoalManagement
         /// < /root >
         /// IE all goals have a base set of elements, and may have one or more child goals.
         /// </summary>
-        private void LoadGoals(Goal goal, XmlTextReader reader)
+        private void LoadGoals(GoalNode goal, XmlTextReader reader)
         {
-            Goal newGoal = new Goal("");
+            GoalNode newGoal = new GoalNode("");
             bool inGoal = false;
             bool inGoalText = false;
             bool inIsCompleteText = false;
@@ -247,6 +247,10 @@ namespace GoalManagement
                 {
                     if (inGoalText)
                     {
+                        if (reader.Value == "root")
+                        {
+                            inGoal = false;
+                        }
                         if (goal == null)
                             newGoal = AddGoal(reader.Value);
                         else
@@ -302,43 +306,41 @@ namespace GoalManagement
         /// </summary>
         /// <param name="Text">The text for the child goal</param>
         /// <returns>The newly added child goal</returns>
-        /*
-        public Goal AddChild(string Text)
+        
+        public GoalNode AddChild(string Text)
         {
-            Goal childGoal = new Goal(Text);
-            this.ChildGoals.AddLast(childGoal);
-            return ChildGoals.Last();
-        }*/
+            GoalNode childGoal = new GoalNode(Text);
+            this.Nodes.Add(childGoal);
+            return (GoalNode)this.LastNode;
+        }
 
         /// <summary>
         /// Marks goal complete, if the goal has no incomplete children.
         /// </summary>
-        public void CompleteGoal()
+        public bool CompleteGoal()
         {
-            if (this.GetChildGoals(true).Count == 0)
+            if (!IncompleteChildGoals())
                 IsComplete = true;
+            return IsComplete;
         }
 
         /// <summary>
-        /// Gets children of this goal.
+        /// Checks if a node has any incomplete children.
         /// </summary>
-        /// <param name="incompleteOnly">If true, gets incomplete child goals only; if false, gets all children</param>
-        /// <returns>Linked list of goals (incomplete or all, depending on input parameter) which are children of this goal</returns>
-        public TreeNodeCollection GetChildGoals(bool incompleteOnly)
+        /// <returns>True if any incomplete children, else false.</returns>
+        public bool IncompleteChildGoals()
         {
-            /*if (incompleteOnly)
+            bool anyIncomplete = false;
+
+            foreach (GoalNode goal in this.Nodes)
             {
-                LinkedList<Goal> activeChildGoals = new LinkedList<Goal>();
-                foreach (Goal goal in ChildGoals)
+                if (!goal.IsComplete)
                 {
-                    if (!goal.IsComplete)
-                        activeChildGoals.AddLast(goal);
+                    anyIncomplete = true;
+                    break;
                 }
-                return activeChildGoals;
             }
-            else
-                return ChildGoals;*/
-            return this.
+            return anyIncomplete;
         }
     }
 }
