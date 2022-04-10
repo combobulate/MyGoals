@@ -44,6 +44,7 @@ namespace MyGoals
                 markComplete.Enabled = true;
             else
                 markComplete.Enabled = false;
+            selectedGoal.Text = goal.GoalText;
         }
 
         private void treeViewPrintGoals(TreeNode tree, LinkedList<GoalManagement.Goal> goals)
@@ -121,6 +122,11 @@ namespace MyGoals
         {
             myGoalsList.Save();
             Application.Exit();
+        }
+
+        private void selectedGoal_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

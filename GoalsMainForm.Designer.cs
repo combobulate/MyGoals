@@ -35,6 +35,7 @@ namespace MyGoals
             this.addChild = new System.Windows.Forms.Button();
             this.markComplete = new System.Windows.Forms.Button();
             this.saveAndQuit = new System.Windows.Forms.Button();
+            this.selectedGoal = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // newGoal
@@ -87,11 +88,22 @@ namespace MyGoals
             this.saveAndQuit.UseVisualStyleBackColor = true;
             this.saveAndQuit.Click += new System.EventHandler(this.saveAndQuit_Click);
             // 
+            // selectedGoal
+            // 
+            this.selectedGoal.AutoSize = true;
+            this.selectedGoal.Location = new System.Drawing.Point(579, 210);
+            this.selectedGoal.Name = "selectedGoal";
+            this.selectedGoal.Size = new System.Drawing.Size(69, 13);
+            this.selectedGoal.TabIndex = 7;
+            this.selectedGoal.Text = "";
+            this.selectedGoal.Click += new System.EventHandler(this.selectedGoal_Click);
+            // 
             // GoalsMainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(546, 623);
+            this.ClientSize = new System.Drawing.Size(1047, 623);
+            this.Controls.Add(this.selectedGoal);
             this.Controls.Add(this.saveAndQuit);
             this.Controls.Add(this.markComplete);
             this.Controls.Add(this.addChild);
@@ -102,6 +114,7 @@ namespace MyGoals
             this.Text = "My Goal Tracker";
             this.Load += new System.EventHandler(this.GoalsMainForm_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -112,6 +125,7 @@ namespace MyGoals
         private System.Windows.Forms.Button addChild;
         private System.Windows.Forms.Button markComplete;
         private System.Windows.Forms.Button saveAndQuit;
+        private System.Windows.Forms.Label selectedGoal;
     }
 }
 
