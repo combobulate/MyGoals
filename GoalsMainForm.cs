@@ -44,7 +44,8 @@ namespace MyGoals
                 markComplete.Enabled = true;
             else
                 markComplete.Enabled = false;
-            selectedGoal.Text = goal.GoalText;
+            selectedGoal.Text = "Goal: " + goal.GoalText;
+            selectedCreated.Text = "Created: " + goal.Created.ToString("MMMM d yyyy");
         }
 
         private void treeViewPrintGoals(TreeNode tree, LinkedList<GoalManagement.Goal> goals)
@@ -125,6 +126,11 @@ namespace MyGoals
         }
 
         private void selectedGoal_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void selectedCreated_Click(object sender, EventArgs e)
         {
 
         }
