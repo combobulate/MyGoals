@@ -44,6 +44,12 @@ namespace MyGoals
                 markComplete.Enabled = true;
             else
                 markComplete.Enabled = false;
+            selectedGoal.Text = "Goal: " + goal.GoalText;
+            selectedCreated.Text = "Created: " + goal.Created.ToString("MMMM d yyyy");
+            if (goal.IsComplete)
+                selectedStatus.Text = "Status: Completed on " + goal.Completed.ToString("MMMM d yyyy");
+            else
+                selectedStatus.Text = "Status: Incomplete";
         }
 
         private void treeViewPrintGoals(TreeNode tree, LinkedList<GoalManagement.Goal> goals)
@@ -121,6 +127,21 @@ namespace MyGoals
         {
             myGoalsList.Save();
             Application.Exit();
+        }
+
+        private void selectedGoal_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void selectedCreated_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void selectedStatus_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -35,6 +35,9 @@ namespace MyGoals
             this.addChild = new System.Windows.Forms.Button();
             this.markComplete = new System.Windows.Forms.Button();
             this.saveAndQuit = new System.Windows.Forms.Button();
+            this.selectedGoal = new System.Windows.Forms.Label();
+            this.selectedCreated = new System.Windows.Forms.Label();
+            this.selectedStatus = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // newGoal
@@ -87,11 +90,44 @@ namespace MyGoals
             this.saveAndQuit.UseVisualStyleBackColor = true;
             this.saveAndQuit.Click += new System.EventHandler(this.saveAndQuit_Click);
             // 
+            // selectedGoal
+            // 
+            this.selectedGoal.AutoSize = true;
+            this.selectedGoal.Location = new System.Drawing.Point(579, 210);
+            this.selectedGoal.Name = "selectedGoal";
+            this.selectedGoal.Size = new System.Drawing.Size(35, 13);
+            this.selectedGoal.TabIndex = 7;
+            this.selectedGoal.Text = "Goal: ";
+            this.selectedGoal.Click += new System.EventHandler(this.selectedGoal_Click);
+            // 
+            // selectedCreated
+            // 
+            this.selectedCreated.AutoSize = true;
+            this.selectedCreated.Location = new System.Drawing.Point(579, 246);
+            this.selectedCreated.Name = "selectedCreated";
+            this.selectedCreated.Size = new System.Drawing.Size(47, 13);
+            this.selectedCreated.TabIndex = 8;
+            this.selectedCreated.Text = "Created:";
+            this.selectedCreated.Click += new System.EventHandler(this.selectedCreated_Click);
+            // 
+            // selectedStatus
+            // 
+            this.selectedStatus.AutoSize = true;
+            this.selectedStatus.Location = new System.Drawing.Point(579, 282);
+            this.selectedStatus.Name = "selectedStatus";
+            this.selectedStatus.Size = new System.Drawing.Size(43, 13);
+            this.selectedStatus.TabIndex = 9;
+            this.selectedStatus.Text = "Status: ";
+            this.selectedStatus.Click += new System.EventHandler(this.selectedStatus_Click);
+            // 
             // GoalsMainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(546, 623);
+            this.ClientSize = new System.Drawing.Size(1047, 623);
+            this.Controls.Add(this.selectedStatus);
+            this.Controls.Add(this.selectedCreated);
+            this.Controls.Add(this.selectedGoal);
             this.Controls.Add(this.saveAndQuit);
             this.Controls.Add(this.markComplete);
             this.Controls.Add(this.addChild);
@@ -102,6 +138,7 @@ namespace MyGoals
             this.Text = "My Goal Tracker";
             this.Load += new System.EventHandler(this.GoalsMainForm_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -112,6 +149,9 @@ namespace MyGoals
         private System.Windows.Forms.Button addChild;
         private System.Windows.Forms.Button markComplete;
         private System.Windows.Forms.Button saveAndQuit;
+        private System.Windows.Forms.Label selectedGoal;
+        private System.Windows.Forms.Label selectedCreated;
+        private System.Windows.Forms.Label selectedStatus;
     }
 }
 

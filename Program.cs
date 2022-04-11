@@ -157,6 +157,16 @@ namespace GoalManagement
                 writer.WriteString(goal.IsComplete.ToString());
                 writer.WriteEndElement();
 
+                // Goal created element
+                writer.WriteStartElement("Created");
+                writer.WriteString(goal.Created.ToString());
+                writer.WriteEndElement();
+
+                // Goal completed element
+                writer.WriteStartElement("Completed");
+                writer.WriteString(goal.Completed.ToString());
+                writer.WriteEndElement();
+
                 // Add each child goal as a child goal element
                 if (goal.GetChildGoals(false).Count != 0)
                 {
@@ -214,7 +224,9 @@ namespace GoalManagement
             Goal newGoal = new Goal("");
             bool inGoal = false;
             bool inGoalText = false;
-            bool inIsCompleteText = false;
+            bool inIsComplete = false;
+            bool inCreated = false;
+            bool inCompleted = false;
 
             do
             {
@@ -238,7 +250,13 @@ namespace GoalManagement
                             inGoalText = true;
                             break;
                         case "IsComplete":
-                            inIsCompleteText = true;
+                            inIsComplete = true;
+                            break;
+                        case "Created":
+                            inCreated = true;
+                            break;
+                        case "Completed":
+                            inCompleted = true;
                             break;
                     }
                 }
@@ -251,8 +269,12 @@ namespace GoalManagement
                         else
                             newGoal = goal.AddChild(reader.Value);
                     }
-                    else if (inIsCompleteText & bool.Parse(reader.Value))
+                    else if (inIsComplete && bool.Parse(reader.Value))
                         newGoal.CompleteGoal();
+                    else if (inCreated)
+                        newGoal.Created = DateTime.Parse(reader.Value);
+                    else if (inCompleted)
+                        newGoal.Completed = DateTime.Parse(reader.Value);
                 }
                 else if (reader.NodeType == XmlNodeType.EndElement)
                 {
@@ -268,7 +290,13 @@ namespace GoalManagement
                             inGoalText = false;
                             break;
                         case "IsComplete":
-                            inIsCompleteText = false;
+                            inIsComplete = false;
+                            break;
+                        case "Created":
+                            inCreated = false;
+                            break;
+                        case "Completed":
+                            inCompleted = false;
                             break;
                     }
                 }
@@ -284,6 +312,8 @@ namespace GoalManagement
         /// </summary>
         public string GoalText { get; set; }
         public bool IsComplete { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime Completed { get; set; }
         private LinkedList<Goal> ChildGoals = new LinkedList<Goal>();
 
         /// <summary>
@@ -294,6 +324,8 @@ namespace GoalManagement
         {
             this.GoalText = Text;
             this.IsComplete = false;
+            this.Created = DateTime.Now;
+            this.Completed = new DateTime();
         }
 
         /// <summary>
